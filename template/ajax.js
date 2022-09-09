@@ -124,29 +124,62 @@ function createProvince() {
             id: countries
         }
     }
-    $.ajax({
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        type: "POST",
-        data: JSON.stringify(province),
-        url: "http://localhost:8080/Provinces",
-        success: function () {
-            $('#myModal').modal('hide');
-            resetFormCreate()
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Tạo mới thành công',
-                showConfirmButton: false,
-                timer: 1000
+    if (area == null || area == isNaN() || area == 0 || population == null || population == isNaN() || population == 0 ||gdp == null || gdp == isNaN() || gdp == 0 ){
+        resetFormCreate()
+        createFail()
+        $("#myModal").modal("hide")
 
-            })
-            setTimeout(getProvinces, 100)
-        }
-    })
+    }else {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: "POST",
+            data: JSON.stringify(province),
+            url: "http://localhost:8080/Provinces",
+            success: function () {
+                $('#myModal').modal('hide');
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Tạo mới thành công',
+                    showConfirmButton: false,
+                    timer: 1000
+
+                })
+                setTimeout(getProvinces, 100)
+                resetFormCreate()
+            },
+            error: function (data) {
+                if (data.status === 404 || data.status === 415) {
+                    createFail()
+                } else {
+                    createFail()
+                }
+                resetFormCreate()
+                $("#myModal").modal("hide")
+            }
+        })
+    }
+
     event.preventDefault()
+}
+
+function createFail(){
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi...',
+        text: 'Tạo mới thất bại',
+    })
+}
+
+function updateFail(){
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi...',
+        text: 'Cập nhập thất bại',
+    })
 }
 
 function updateFrom(id){
@@ -167,11 +200,8 @@ function updateFrom(id){
         type: "GET",
         url: "http://localhost:8080/Provinces/" + id,
         success: function (data){
-            let resultImage = ""
-                resultImage += "<img width='100px' height='100px' src='../../../static/image/" + data.imageUrl + "' >"
             idProvince = data.id
            setFormUpdate(data)
-            document.getElementById("imagePhone").innerHTML = resultImage;
             // document.getElementById("messageCreate").innerHTML = "";
         }
     })
@@ -210,22 +240,32 @@ function updatePhone(){
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                type: "PUT",
-                data: JSON.stringify(province),
-                url: "http://localhost:8080/Provinces",
-                success: function (data) {
-                    setFormUpdate(data)
+            if (area == null || area == isNaN() || area == 0 || population == null || population == isNaN() || population == 0 ||gdp == null || gdp == isNaN() || gdp == 0 ){
+                updateFail()
+            }else {
+                $.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    type: "PUT",
+                    data: JSON.stringify(province),
+                    url: "http://localhost:8080/Provinces",
+                    success: function (data) {
+                        setFormUpdate(data)
+                        Swal.fire('Chỉnh sửa thành công!', '', 'success')
+                        setTimeout(getProvinces, 100)
+                    },
+                    error: function (data) {
+                        if (data.status === 404 || data.status === 415) {
+                            setTimeout(updateFail, 500)
+                        } else {
+                            setTimeout(updateFail, 500)
+                        }
+                    }
+                })
+            }
 
-                }
-            })
-
-            Swal.fire('Chỉnh sửa thành công!', '', 'success')
-            setTimeout(getProvinces, 100)
         } else if (result.isDenied) {
             Swal.fire('Hủy bỏ thành công', '', 'info')
         }
