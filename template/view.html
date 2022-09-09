@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css.css">
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script></head>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<body>
+<section>
+    <!--for demo wrap-->
+    <h1>Quản Lý Tỉnh Thành</h1>
+    <div class="input-group mb-3">
+        <input id="search" type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <button onclick="searchListPhone()" class="btn btn-outline-secondary" type="button" id="button-addon2">Tìm kiếm</button>
+    </div>
+    <button class="btn btn-primary" onclick="getAllPhone()">
+        Tất cả tỉnh thành
+    </button>
+    <button style="margin-left: 2px " type="button" class="btn btn-primary" onclick="displayCreateForm()">
+        Tạo mới tỉnh thành
+    </button>
+    <br>
+    <div id="get_by_brands">
+
+    </div>
+
+
+    <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr>
+                <th>Stt</th>
+                <th>Tên</th>
+                <th>Diện tích</th>
+                <th>Dân số</th>
+                <th>GDP</th>
+                <th>Miêu tả</th>
+                <th>Quốc Gia</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="list-provinces" class="tbl-content">
+
+    </div>
+</section>
+
+<!-- The Modal Create And Update -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 id="titleFrom" class="modal-title"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <form enctype="multipart/form-data">
+                <table class="modal-body">
+                    <tr>
+                        <td>
+                            <input id="name" type="text">
+                            Tên
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="area" type="text">
+                            Diện tích
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="population" type="text">
+                            Dân số
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="gdp" type="text">
+                            Gdp
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea id="description"></textarea>
+                            Miêu tả
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="" id="countries">
+
+                            </select>
+                            Loại
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="messageCreate">
+
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button id="button" type="button" class="btn btn-danger" ></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- End Modal Create And Update -->
+<div class="modal" id="detailModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 id="titleFromDetail" class="modal-title">Thông tin thành phố</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 20px" id="nameDetail">
+
+                </div>
+                <div style="font-size: 20px" id="areaDetail">
+
+                </div>
+                <div style="font-size: 20px" id="populationDetail">
+
+                </div>
+                <div style="font-size: 20px" id="gdpDetail">
+
+                </div>
+                <div style="font-size: 20px" id="descriptionDetail">
+
+                </div>
+                <div style="font-size: 20px" id="countryDetail">
+
+                </div>
+            </div>
+            <!-- Modal body -->
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="ajax.js"></script>
+</html>
