@@ -35,7 +35,6 @@ public class FileDBController {
                 break;
             }
         }
-
         if (allowed) {
             try {
                 for (MultipartFile item : file) {
@@ -73,9 +72,19 @@ public class FileDBController {
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable("id") String id) {
         Optional<FileDB> fIleDB = filesStorageService.getFile(id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fIleDB.get().getName() + "\"")
-                .body(fIleDB.get().getData());
+        return fIleDB.map(fileDB -> ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+                .body(fileDB.getData())).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseMessageFile> deleteFile(@PathVariable("id") String id){
+        Optional<FileDB> fileDB = filesStorageService.getFile(id);
+        if (fileDB.isPresent()){
+            filesStorageService.deleteFile(id);
+            return ResponseEntity.ok().body(new ResponseMessageFile("Delete file successfully!"));
+        }
+        return new ResponseEntity<>(new ResponseMessageFile("Delete failed, file does not exist!"), HttpStatus.NOT_FOUND);
     }
 
 }

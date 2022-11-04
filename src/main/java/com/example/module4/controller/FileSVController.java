@@ -25,21 +25,21 @@ public class FileSVController {
     private FilesSVStorageService storageService;
 
     @PostMapping
-    public ResponseEntity<ResponseMessageFile> uploadFile(@RequestParam("file")List<MultipartFile> file){
+    public ResponseEntity<ResponseMessageFile> uploadFile(@RequestParam("file") List<MultipartFile> file) {
         String message = "";
         boolean allowed = true;
-        for (MultipartFile multipartFile: file) {
-            if (!storageService.getTypeFile().getAllowedMimeTypes().contains(multipartFile.getContentType())){
+        for (MultipartFile multipartFile : file) {
+            if (!storageService.getTypeFile().getAllowedMimeTypes().contains(multipartFile.getContentType())) {
                 allowed = false;
                 break;
             }
         }
-        if (allowed){
-            try{
+        if (allowed) {
+            try {
                 storageService.save(file);
                 message = "Uploaded the file successfully!";
                 return ResponseEntity.ok().body(new ResponseMessageFile(message));
-            }catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 message = "Error uploading duplicate files!";
                 return new ResponseEntity<>(new ResponseMessageFile(message), HttpStatus.EXPECTATION_FAILED);
             }
@@ -49,14 +49,14 @@ public class FileSVController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FileServer>> getListFiles(){
+    public ResponseEntity<List<FileServer>> getListFiles() {
         List<FileServer> fileServers = storageService.loadAll().map(path -> {
             String fileName = path.getFileName().toString();
             String url = MvcUriComponentsBuilder.fromMethodName(FileSVController.class, "getFile", path.getFileName().toString()).build().toString();
             int index = fileName.lastIndexOf(".");
             String typeFile = "";
-            if (index > 0){
-               typeFile = fileName.substring(index + 1);
+            if (index > 0) {
+                typeFile = fileName.substring(index + 1);
             }
             return new FileServer(fileName, url, typeFile);
         }).collect(Collectors.toList());
@@ -64,16 +64,16 @@ public class FileSVController {
     }
 
     @GetMapping("/{fileName}")
-    public ResponseEntity<Resource> getFile(@PathVariable("fileName") String fileName){
-         Resource file = storageService.load(fileName);
-         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    public ResponseEntity<Resource> getFile(@PathVariable("fileName") String fileName) {
+        Resource file = storageService.load(fileName);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @DeleteMapping("{path}")
-    public ResponseEntity<ResponseMessageFile> deleteFiles(@PathVariable("path") String path){
+    public ResponseEntity<ResponseMessageFile> deleteFiles(@PathVariable("path") String path) {
         File file = new File("D:\\module-4\\uploads\\" + path);
-        if (file.exists()){
+        if (file.exists()) {
             storageService.deleteFiles(file);
             return ResponseEntity.ok().body(new ResponseMessageFile("Delete file successfully!"));
         }
