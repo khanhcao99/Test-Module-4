@@ -1,0 +1,32 @@
+Have you ever tried using Strim filter?
+wwhat is the "reduce"?
+
+If you have a string, have a lots of string, arrays, wwhat command or method sẽ dùng nếu tính tới performance? 
+String buffer/ String builder?
+
+Bean trong Spring là gì? Liệt kê các Scopes của Spring Bean?
+
+‘dependency injection’ là gì?
+
+IOC là gì? Có mấy loại IOC
+
+Có bao nhiêu cách để thực hiện Dependency Injection?
+
+Vai trò của DispatcherServlet và ContextLoaderListener?
+
+ Tên các loại transaction management mà Spring hỗ trợ?
+
+Một số annotation quan trọng trong Spring?
+
+Cho biết các interface cơ bản của Java Collections framework?
+
+Iterator là gì trong Java Collection?
+
+Giải thích sự khác nhau giữa ListIterator và Iterator?
+
+Sự khác nhau giữa ArrayList và LinkedList là gì?
+
+Phương thức hashCode() là gì?
+
+Interface có thể là final không?
+
